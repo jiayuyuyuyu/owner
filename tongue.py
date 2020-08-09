@@ -22,7 +22,7 @@ from sklearn.metrics import roc_auc_score
 from keras import backend as K
 from sklearn.model_selection import train_test_split #將資料分開成兩部分
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.datasets import load_iris #导入IRIS数据集 
+from sklearn.datasets import load_iris # 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
