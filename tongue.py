@@ -33,7 +33,7 @@ except:
     print("Fail")
 
 #Keras模型構建主要包括5個步驟：定義（define），編譯（compile），訓練（fit），評估（evaluate），預測（prediction）#
-#训练集的图片生成器，通过参数的设置进行数据扩增
+#數據擴增
 checkpoint = ModelCheckpoint(        #保存點
 	"t3.h5",
 	monitor='val_loss',
@@ -57,16 +57,16 @@ train_datagen = ImageDataGenerator(
 val_datagen = ImageDataGenerator(
     preprocessing_function=preprocess_input,
      rotation_range=30, #旋轉
-    width_shift_range=0.2, #水平位置平移
-    height_shift_range=0.2, #上下位置平移
-    shear_range=0.2, #讓所有點的x坐標(或者y坐標)保持不變，而對應的y坐標(或者x坐標)則按比例發生平移
-    zoom_range=0.2, #讓圖片在長或寬的方向進行RESIZE,參數大於0小於1時，放大，參數大於1時，縮小
-    horizontal_flip=True, #執行水平翻轉操作，意味著不一定對所有圖片都會執行水平翻轉，每次生成均是隨機選取圖片進行翻轉
+    width_shift_range=0.2, 
+    height_shift_range=0.2,
+    shear_range=0.2, 
+    zoom_range=0.2,
+    horizontal_flip=True, 
     rescale=1./255
  )
 
 train_generator = train_datagen.flow_from_directory(directory='t4\\train',   #flow_from_directory讀取圖片，ImageDataGenerator進行增強
-                                  target_size=(224,224),#Inception V3规定大小
+                                  target_size=(224,224),#Inception V3規定大小
                                   batch_size=batch_size, 
                                   class_mode='categorical',
                                 )  
@@ -74,8 +74,8 @@ val_generator = val_datagen.flow_from_directory(directory='t4\\val',
                                 target_size=(224,224),
                                 batch_size=batch_size, 
                                  class_mode='categorical',
-                                 shuffle=False)   
-# 构建基础模型
+                              shuffle=False)   
+
 print(len(val_generator))
 print(len(train_generator))
 
@@ -85,9 +85,9 @@ labels = (train_generator.class_indices)
 base_model = InceptionV3(weights='imagenet',include_top=False)
 
 
-# 增加新的输出层
+
 x = base_model.output
-x = GlobalAveragePooling2D()(x) # GlobalAveragePooling2D 将 MxNxC 的张量转换成 1xC 张量，C是通道数
+x = GlobalAveragePooling2D()(x)
 x = Dense(1024,activation='relu')(x)
 x = Dropout(0.5)(x)
 
